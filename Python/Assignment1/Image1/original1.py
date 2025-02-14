@@ -11,9 +11,9 @@ def createMap(intMap):
     return freqMap
 
 # Step 1: Read the image
-# image_path = '../assets/ass1/boats.bmp'  # original
+image_path = '../assets/ass1/Brain1.pgm'  # original
 # image_path = './log_transform/log_transformed.jpg'  # log transformed c =1
-image_path = './log_transform/gamma_transformed_gamma_0.6.jpg'  # log transformed c = 1, gamma = 0.6
+# image_path = './log_transform/gamma_transformed_gamma_0.6.jpg'  # log transformed c = 1, gamma = 0.6
 # image_path = './log_transform/gamma_transformed_gamma_1.jpg'  # log transformed c = 1, gamma = 1
 # image_path = './log_transform/gamma_transformed_gamma_2.2.jpg'  # log transformed c = 1, gamma = 2.2
 # image_path = './abc/inverted.bmp'

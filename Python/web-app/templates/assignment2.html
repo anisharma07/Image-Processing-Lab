@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Histogram Transformations</title>
+    <script>
+      async function handleUpload(event) {
+          event.preventDefault();
+
+          const formData = new FormData(document.getElementById('uploadForm'));
+          const response = await fetch('/upload', {
+              method: 'POST',
+              body: formData
+          });
+
+          if (response.ok) {
+              const data = await response.json();
+              document.getElementById('originalImage').src = data.original;
+              document.getElementById('logImage').src = data.log;
+              document.getElementById('contrastImage').src = data.contrast;
+              document.getElementById('powerImage').src = data.power;
+              document.getElementById('contrastHistogram').src = data.contrast_hist;
+              document.getElementById('logHistogram').src = data.log_hist;
+              document.getElementById('originalHistogram').src = data.original_hist;
+              document.getElementById('powerHistogram').src = data.power_hist;
+
+          } else {
+              alert('Failed to upload image');
+          }
+      }
+      async function handleUpload2(event) {
+          event.preventDefault();
+
+          const formData = new FormData(document.getElementById('uploadForm2'));
+          const response = await fetch('/upload', {
+              method: 'POST',
+              body: formData
+          });
+
+          if (response.ok) {
+              const data = await response.json();
+              document.getElementById('originalImage2').src = data.original;
+              document.getElementById('logImage2').src = data.log;
+              document.getElementById('contrastImage2').src = data.contrast;
+              document.getElementById('powerImage2').src = data.power;
+              document.getElementById('contrastHistogram2').src = data.contrast_hist;
+              document.getElementById('logHistogram2').src = data.log_hist;
+              document.getElementById('originalHistogram2').src = data.original_hist;
+              document.getElementById('powerHistogram2').src = data.power_hist;
+
+          } else {
+              alert('Failed to upload image');
+          }
+      }
+
+      function updateTransform() {
+        const powerId = document.getElementById('powerTransform');
+          const form = document.getElementById('uploadForm');
+          const c = document.getElementById('cSlider').value;
+          const gamma = document.getElementById('gammaSlider').value;
+
+          form.c.value = c;
+          form.gamma.value = gamma;
+          powerId.innerHTML = `Power Transform: (c=${c}, gamma=${gamma})`;
+
+          if (form.image.files.length > 0) {
+              handleUpload(new Event('submit'));
+          }
+      }
+      function updateTransform2() {
+        const powerId = document.getElementById('powerTransform2');
+          const form = document.getElementById('uploadForm2');
+          const c = document.getElementById('cSlider2').value;
+          const gamma = document.getElementById('gammaSlider2').value;
+
+          form.c.value = c;
+          form.gamma.value = gamma;
+          powerId.innerHTML = `Power Transform: (c=${c}, gamma=${gamma})`;
+
+          if (form.image.files.length > 0) {
+              handleUpload2(new Event('submit'));
+          }
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Image Transformations</h1>
+    <div
+      style="display: flex; gap: 20px; align-items: center; justify-content: space-evenly;"
+    >
+      <form id="uploadForm" onsubmit="handleUpload(event)">
+        <label for="image">Upload Image1:</label>
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept="image/*,image/x-portable-graymap"
+          required
+        />
+        <br /><br />
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div>
+            <label for="cSlider">Log Transform (c):</label>
+            <input
+              type="range"
+              id="cSlider"
+              name="c"
+              min="0"
+              max="10"
+              step="0.1"
+              value="1"
+              onchange="updateTransform()"
+            />
+            <span id="cValue">1</span>
+          </div>
+
+          <div>
+            <label for="gammaSlider">Gamma Transform (γ):</label>
+            <input
+              type="range"
+              id="gammaSlider"
+              name="gamma"
+              min="0"
+              max="10"
+              step="0.1"
+              value="1"
+              onchange="updateTransform()"
+            />
+            <span id="gammaValue">1</span>
+          </div>
+        </div>
+        <br /><br />
+
+        <input type="hidden" name="c" value="1" />
+        <input type="hidden" name="gamma" value="1" />
+
+        <button type="submit">Upload Image1</button>
+      </form>
+      <form id="uploadForm2" onsubmit="handleUpload2(event)">
+        <label for="image">Upload Image2:</label>
+        <input
+          type="file"
+          id="image2"
+          name="image"
+          accept="image/*,image/x-portable-graymap"
+          required
+        />
+        <br /><br />
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div>
+            <label for="cSlider2">Log Transform (c):</label>
+            <input
+              type="range"
+              id="cSlider2"
+              name="c"
+              min="0"
+              max="10"
+              step="0.1"
+              value="1"
+              onchange="updateTransform2()"
+            />
+            <span id="cValue2">1</span>
+          </div>
+
+          <div>
+            <label for="gammaSlider2">Gamma Transform (γ):</label>
+            <input
+              type="range"
+              id="gammaSlider2"
+              name="gamma"
+              min="0"
+              max="10"
+              step="0.1"
+              value="1"
+              onchange="updateTransform2()"
+            />
+            <span id="gammaValue2">1</span>
+          </div>
+        </div>
+        <br /><br />
+
+        <input type="hidden" name="c" value="1" />
+        <input type="hidden" name="gamma" value="1" />
+
+        <button type="submit">Upload Image2</button>
+      </form>
+    </div>
+
+    <h2>Results</h2>
+    <div
+      style="display: flex; gap: 20px; align-items: center; justify-content: space-evenly;"
+    >
+      <div style="display: flex; gap: 20px; flex-direction: column;">
+        <div style="display: flex; flex-direction: column;">
+          <h3>Image 1</h3>
+          <img
+            id="originalImage"
+            alt="Original Image"
+            style="max-width: 350px;"
+          />
+          <img
+            id="originalHistogram"
+            alt="original histogram"
+            style="width: 450px;"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <h3>Contrast Stretching</h3>
+          <img
+            id="contrastImage"
+            alt="Gamma Transform"
+            style="max-width: 450px;"
+          />
+          <img
+            id="contrastHistogram"
+            alt="Gamma histogram"
+            style="max-width: 450px;"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <h3>Log Transform</h3>
+          <img id="logImage" alt="Log Transform" style="max-width: 450px;" />
+          <img
+            id="logHistogram"
+            alt="Log histogram"
+            style="max-width: 450px;"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <h3 id="powerTransform">Power Transform</h3>
+          <img
+            id="powerImage"
+            alt="Power Transform"
+            style="max-width: 450px;"
+          />
+          <img
+            id="powerHistogram"
+            alt="Power Histogram"
+            style="max-width: 450px;"
+          />
+        </div>
+      </div>
+      <div style="display: flex; gap: 20px; flex-direction: column;">
+        <div style="display: flex; flex-direction: column;">
+          <h3>Image 2</h3>
+          <img
+            id="originalImage2"
+            alt="Original Image2"
+            style="max-width: 350px;"
+          />
+          <img
+            id="originalHistogram2"
+            alt="original histogram2"
+            style="width: 450px;"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <h3>Contrast Stretching</h3>
+          <img
+            id="contrastImage2"
+            alt="Gamma Transform2"
+            style="max-width: 450px;"
+          />
+          <img
+            id="contrastHistogram2"
+            alt="Gamma histogram2"
+            style="max-width: 450px;"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <h3>Log Transform</h3>
+          <img id="logImage2" alt="Log Transform2" style="max-width: 450px;" />
+          <img
+            id="logHistogram2"
+            alt="Log histogram2"
+            style="max-width: 450px;"
+          />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <h3 id="powerTransform2">Power Transform</h3>
+          <img
+            id="powerImage2"
+            alt="Power Transform2"
+            style="max-width: 450px;"
+          />
+          <img
+            id="powerHistogram2"
+            alt="Power Histogram2"
+            style="max-width: 450px;"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // for Image 1
+      document.getElementById('cSlider').addEventListener('input', (e) => {
+          document.getElementById('cValue').textContent = e.target.value;
+      });
+      document.getElementById('gammaSlider').addEventListener('input', (e) => {
+          document.getElementById('gammaValue').textContent = e.target.value;
+      });
+      // for Image 2
+      document.getElementById('cSlider2').addEventListener('input', (e) => {
+          document.getElementById('cValue2').textContent = e.target.value;
+      });
+      document.getElementById('gammaSlider2').addEventListener('input', (e) => {
+          document.getElementById('gammaValue2').textContent = e.target.value;
+      });
+    </script>
+  </body>
+</html>

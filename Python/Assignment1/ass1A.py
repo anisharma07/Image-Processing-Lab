@@ -2,33 +2,32 @@ from PIL import Image
 import numpy as np
 
 # Image and folder paths
-file_path = "../assets/ass1/boats.bmp"
-output_folder = "abc"
+file_path = "../assets/ass1/shoulderCR.pgm"
+output_folder = "abc2"
 
+def intensity_averaging(image):
+    np_img = np.array(image)
+    avg_intensity = np.mean(np_img)
+    return Image.fromarray(np.full_like(np_img, avg_intensity), mode='L')
 
 def invert_image(image):
-    """
-    Inverts the grayscale image by applying 255 - pixel_value.
-    """
     np_img = np.array(image)
     inverted = 255 - np_img
     return Image.fromarray(inverted, mode='L')
 
 def sub_sampling(image, factor):
-    """
-    Reduces the size of the image by selecting every nth pixel.
-    """
     np_img = np.array(image)
     sub_sampled = np_img[::factor, ::factor]
     return Image.fromarray(sub_sampled, mode='L')
 
 def process_bmp(file_path, output_folder, sub_sample_factor=2):
-    """
-    Processes the BMP file for intensity averaging, inversion, and sub-sampling.
-    """
-    # Load the BMP image
+    
     image = Image.open(file_path)
     
+    # Step 1: Intensity Averaging
+    avg_intensity = intensity_averaging(image)
+    avg_intensity.save(f"{output_folder}/intensity_averaging.bmp")
+
     # Step 2: Inversion
     inverted_image = invert_image(image)
     inverted_image.save(f"{output_folder}/inverted.bmp")
