@@ -12,7 +12,10 @@ def createMap(intMap):
 
 
 # Step 1: Read the image
-image_path = '../assets/Images/Exp1/scene.jpg'  # Replace with the path to your image
+# image_path = '../assets/Images/Exp1/scene.jpg'  # Replace with the path to your image
+image_path = './Assignment3/Histogram_Specified_Moon.jpg'
+
+
 image = cv2.imread(image_path)
 print(image.shape);
 

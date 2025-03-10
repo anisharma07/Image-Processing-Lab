@@ -17,7 +17,8 @@ def gamma_transform(image, gamma):
     return Image.fromarray(gamma_image.astype(np.uint8))
 
 # Filepath
-image_path = '../assets/ass1/boats.bmp'
+# image_path = '../assets/ass1/boats.bmp'
+image_path = './Assignment0/rgb.png'
 
 # Read and transform the image
 image = Image.open(image_path)

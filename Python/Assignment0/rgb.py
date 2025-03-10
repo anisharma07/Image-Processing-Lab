@@ -12,12 +12,12 @@ def createMap(intMap):
 
 # Step 1: Read the image
 # image_path = '../assets/ass1/boats.bmp'  # original
-image_path = '../assets/ass1/boats.bmp'
+# image_path = '../assets/ass1/boats.bmp'
 # image_path = './log_transform/gamma_transformed_gamma_0.6.jpg'  # log transformed c = 1, gamma = 0.6
 # image_path = './log_transform/gamma_transformed_gamma_1.jpg'  # log transformed c = 1, gamma = 1
 # image_path = './log_transform/gamma_transformed_gamma_2.2.jpg'  # log transformed c = 1, gamma = 2.2
 # image_path = './abc/inverted.bmp'
-# image_path = './abc/sub_sampled.bmp'
+image_path = './Assignment3/Histogram_Specified_Moon.jpg'
 
 image = cv2.imread(image_path)
 print(image.shape)

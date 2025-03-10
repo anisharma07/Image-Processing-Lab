@@ -48,11 +48,11 @@ def process_image(image_path):
     
     return image, equalized_image
 
-image_path = '../assets/ass2/class.jpeg'  # Change path accordingly
+image_path = './Assignment0/xxx.jpg'  # Change path accordingly
 original, equalized = process_image(image_path)
 
-equalized.save('./Assignment2/class_equalized.png')
-original.save('./Assignment2/class.png')
+equalized.save('./Assignment0/xxx_equi.png')
+original.save('./Assignment0/xxx2.png')
 
 
 # plt.figure(figsize=(10, 5))
