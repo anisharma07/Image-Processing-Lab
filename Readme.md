@@ -6,7 +6,7 @@ Image processing involves the manipulation and analysis of digital images using 
 
 [Dip Lab Assignments link](https://drive.google.com/drive/folders/1T_Czqel9OK2tAxJJ1dA0b54_rARXHChS?usp=sharing)
 
-### Creating a Virtual Environment for python
+### Creating a Virtual Environment in python
 
 Change Directory to Python
 
