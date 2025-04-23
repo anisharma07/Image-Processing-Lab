@@ -25,6 +25,17 @@ def sub_sampling(image, factor):
     return Image.fromarray(sub_sampled, mode='L')
 
 
+def contrast_stretching(image_array):
+    """
+    Applies contrast stretching to the image.
+    Formula: new_pixel = 255 * (pixel - min_pixel) / (max_pixel - min_pixel)
+    """
+    min_pixel = np.min(image_array)
+    max_pixel = np.max(image_array)
+    stretched = 255 * (image_array - min_pixel) / (max_pixel - min_pixel)
+    return stretched.astype(np.uint8)
+
+
 def process_bmp(file_path, output_folder, sub_sample_factor=2):
 
     image = Image.open(file_path)

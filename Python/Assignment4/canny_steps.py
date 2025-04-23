@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-image = cv2.imread('./Assignment4/assets/input/house.jpg',
+image = cv2.imread('./assets/p4/house.jpg',
                    cv2.IMREAD_GRAYSCALE)
 
 gaussian_filter = np.array([
@@ -30,10 +30,10 @@ def non_maximum_suppression(magnitude, angle):
     M, N = magnitude.shape
     nms = np.zeros((M, N), dtype=np.float32)
     angle = angle % 180
+    q, r = 0, 0
 
     for i in range(1, M - 1):
         for j in range(1, N - 1):
-            q, r = 255, 255
 
             if (0 <= angle[i, j] < 22.5) or (157.5 <= angle[i, j] <= 180):
                 q = magnitude[i, j + 1]
@@ -50,8 +50,6 @@ def non_maximum_suppression(magnitude, angle):
 
             if magnitude[i, j] >= q and magnitude[i, j] >= r:
                 nms[i, j] = magnitude[i, j]
-            else:
-                nms[i, j] = 0
 
     return nms
 
@@ -59,10 +57,12 @@ def non_maximum_suppression(magnitude, angle):
 nms_image = non_maximum_suppression(gradient_magnitude, gradient_angle)
 
 
+strong = 255
+weak = 75
+
+
 def double_threshold(img, low_thresh, high_thresh):
     """Apply double thresholding."""
-    strong = 255
-    weak = 75
 
     strong_edges = (img >= high_thresh)
     weak_edges = (img >= low_thresh) & (img < high_thresh)
@@ -70,35 +70,48 @@ def double_threshold(img, low_thresh, high_thresh):
     result = np.zeros_like(img)
     result[strong_edges] = strong
     result[weak_edges] = weak
-
-    return result, strong, weak
+    return result
 
 
 low_threshold = 20
 high_threshold = 100
 
 
-thresholded, strong, weak = double_threshold(
+thresholded = double_threshold(
     nms_image, low_threshold, high_threshold)
 
 
-def hysteresis(img, weak, strong):
-    M, N = img.shape
+def hysteresis(thrCopy):
+    M, N = thrCopy.shape
+    directions = [
+        [1, 0],   # right
+        [0, 1],   # down
+        [-1, 0],  # left
+        [0, -1],  # up
+        [1, 1],   # down-right
+        [-1, 1],  # down-left
+        [1, -1],  # up-right
+        [-1, -1]  # up-left
+    ]
     for i in range(1, M - 1):
         for j in range(1, N - 1):
-            if img[i, j] == weak:
-                if ((img[i + 1, j] == strong) or (img[i - 1, j] == strong) or
-                    (img[i, j + 1] == strong) or (img[i, j - 1] == strong) or
-                    (img[i + 1, j + 1] == strong) or (img[i - 1, j - 1] == strong) or
-                        (img[i + 1, j - 1] == strong) or (img[i - 1, j + 1] == strong)):
-                    img[i, j] = strong
+            booly = False
+
+            if thrCopy[i, j] == weak:
+                for x, y in directions:
+                    nx, ny = x+i, y+j
+                    if thrCopy[nx, ny] == strong:
+                        booly = True
+                        break
+                if booly:
+                    thrCopy[i, j] = strong
                 else:
-                    img[i, j] = 0
+                    thrCopy[i, j] = 0
 
-    return img
+    return thrCopy
 
 
-final_edges = hysteresis(thresholded.copy(), weak, strong)
+final_edges = hysteresis(thresholded.copy())
 
 fig, axes = plt.subplots(2, 4, figsize=(18, 10))
 
